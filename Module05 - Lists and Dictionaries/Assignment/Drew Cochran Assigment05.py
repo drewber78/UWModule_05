@@ -6,6 +6,12 @@
 #              Add the each dictionary "row" to a python list "table"
 # ChangeLog (Who,When,What):
 # Drew Cochran, 10FEB2023, Created starter code from Randall Root's example
+# Drew Cochran, 11FEB2023, Debugging; corrected errors to menu as function would not operate properly, exit was not
+#                          correctly, Remove task was not working while testing; currently thinking of way to not have
+#                           'Task' and 'Priority' printed as a header each time file is opened. Believe if statement
+#                           will work best, both in the initial reading of file and while writing tasks. Also changed
+#                           menu to reflect tasks rather than items like Assignment 04.
+# Drew Cochran, 13FEB2023, Stopped trying to make the program write 'task' and 'priority' to .txt file
 #
 # ------------------------------------------------------------------------ #
 
@@ -27,32 +33,35 @@ def ReadFile():
         objFile_ToDoList = open("ToDoList.txt", "r")
         for row in objFile_ToDoList:
             lstRow = row.split(",")
+            #if lstRow[0] == 'Task':
+            #    next()
+            #else:
             dicRow = {"Task" : lstRow[0], "Priority" : lstRow[1].strip()}
             lstTable.append(dicRow)
-            print(lstTable)
+            # print(lstTable)
         objFile_ToDoList.close()
 
     # Print error statement prompting user to locate file needed to run program
     except:
         print("File not found. Locate ToDoList.txt and ensure file is in the same directory as program.")
 
-def UserMenu():
+#def UserMenu():
 
     # Menu function to display user choices
-    print("""
-    Menu of Options
-    1) Show current data
-    2) Add a new item.
-    3) Remove an existing item.
-    4) Save Data to File
-    5) Exit Program
-    """)
-    strChoice = str(input("Which option would you like to perform? [1 to 5] - "))
-    print()  # adding a new line for looks
+#    print("""
+#    Menu of Options
+#    1) Show current data
+#    2) Add a new item.
+#    3) Remove an existing item.
+#    4) Save Data to File
+#    5) Exit Program
+#    """)
+#    strChoice = str(input("Which option would you like to perform? [1 to 5] - "))
+#    print()  # adding a new line for looks
 
 
 # -- Processing -- #
-# Step 1 - When the program starts, load the any data you have
+# Step 1 - When the program starts, load any data available from the text file have
 # in a text file called ToDoList.txt into a python list of dictionaries rows (like Lab 5-2)
 # Used a function to read the file in case of future need and calling upon reading the file
 
@@ -63,14 +72,30 @@ ReadFile()
 while (True):
 
     # Calls function UserMenu to display menu of user options
-    UserMenu()
+    # UserMenu()
+    # Menu function to display user choices
+    print("""
+    Menu of Options
+    1) Show current data
+    2) Add a new task.
+    3) Remove an existing task.
+    4) Save Data to File
+    5) Exit Program
+    """)
+    strChoice = str(input("Which option would you like to perform? [1 to 5] - "))
+    print()  # adding a new line for looks
 
     # Step 3 - Show the current items in the table
     if strChoice.strip() == '1':
 
         # Prints the current contents of lstTable after reading in the data from the existing file immediately upon
-        # opening program and/or after user has added information to be added to the file
-        print(lstTable, "List with Dictionary objects")
+        # opening program and/or after user has added information to be added to the file. For loop with newline after
+        # each task and priority for easier readability.
+        for row in lstTable:
+            print(row, sep='\n', end='\n')
+
+        # Describing to user what they are seeing, a list with dictionary objects
+        print("List with Dictionary objects")
         continue
 
     # Step 4 - Add a new item to the list/Table
@@ -100,7 +125,7 @@ while (True):
     # Step 5 - Remove a new item from the list/Table
     elif strChoice.strip() == '3':
         # Prompts user to enter task to remove or exit to quit.
-        strRemove = input("Enter the task you would like to remove. Type exit to quit.")
+        strRemove = input("Enter the task you would like to remove. Type exit to quit. ")
 
         # Loop to allow user to remove multiple items if desired. "Exit" quits to main menu. CHECK THIS.
         while (True):
@@ -113,7 +138,7 @@ while (True):
                 # Pulls in data from lstTable to prepare for check
                 for row in lstTable:
                     # If check to determine if task is found.
-                    if row["Item"].lower == strRemove.lower():
+                    if row["Task"].lower() == strRemove.lower():
                         lstTable.remove(row)
                         print("Task removed.")
                     # Else statement when item not found. Should go back to main menu. CHECK THIS.
@@ -128,11 +153,11 @@ while (True):
 
         # Open ToDoList.txt
         objFile_ToDoList = open("ToDoList.txt", "w")
-        objFile_ToDoList.write("Task, Priority" + '\n')
+        # objFile_ToDoList.write("Task, Priority" + '\n')
 
         # Iterate through lstTable list to write each item to the file. Overwrites existing file data
         for row in lstTable:
-            objFile_ToDoList.write(str(row["Item"]) + ', ' + str(row["Task"]) + '\n')
+            objFile_ToDoList.write(str(row["Task"]) + ', ' + str(row["Priority"]) + '\n')
 
         # closes file
         objFile_ToDoList.close()
@@ -144,8 +169,8 @@ while (True):
     elif strChoice.strip() == '5':
         # Exits the program. Chose exit rather than break to try since the user is wanting to exit, not just break out
         # of the while loop
-        # break  # and Exit the program
-        exit()
+        break  # and Exit the program
+        # exit()
 
     # Option if user enters anything other than 1 - 5
     else:

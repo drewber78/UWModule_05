@@ -1,0 +1,7 @@
+Task, Priority
+Task, Priority
+Taxes, High
+Cleaning, High
+Dishes, Medium
+PuppyBath, High
+Homework, Urgent
